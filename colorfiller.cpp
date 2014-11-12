@@ -5,41 +5,25 @@
 #include <QColor>
 #include <QtGui/QGuiApplication>
 
-ColorFiller::ColorFiller(QObject *parent) :
-	QObject(parent)
+
+ImageProvider::ImageProvider() : QQuickImageProvider(QQmlImageProviderBase::Image)
 {
+	read = false;
+	windowWidth = 0;
+	windowHeight = 0;
+	imageWidth = 0;
+	imageHeight = 0;
 }
-
-void ColorFiller::fillColor(QImage image, int x, int y) {
-
-	QPoint p(x, y);
-	QRgb  black = qRgb(0, 0, 0);
-	QRgb rgb = image.pixel(p);
-	QRgb color = qRgb(255, 0, 0);
-
-	if (rgb == black) {
-		printf("ESCAPED!!!!!!\n");
-		return;
-	}
-
-	QColor tmp;
-
-	int left = x;
-	while (rgb != black && left > 0) {
-		image.setPixel(p, color);
-		left--;
-		p.setX(left);
-		rgb = image.pixel(p);
-		tmp = QColor(rgb);
-	}
-}
-
 
 void ImageProvider::fillColor(int x, int y) {
-	//doLeftRight(x, y);
-	//doTopBottom(x, y);
-    //checkPixel(image.pixel(x, y),x, y);
-    fillColorRec(image.pixel(x, y),x,y);
+	y -= (windowHeight - imageHeight) / 2;
+	x = x * image.width() / imageWidth;
+	y = y * image.height() / imageHeight;
+
+	printf("image size: %d, %d (x, y): %d, %d\n", image.width(), image.height(), x, y);
+
+	checkPixel(image.pixel(x, y),x, y);
+	//fillColorRec(image.pixel(x, y),x,y);
 	emit newFrameReceived();
 }
 
@@ -70,59 +54,6 @@ void ImageProvider::checkPixel(QRgb bg,int x, int y) {
 	checkPixel(bg,x-1, y);
 	checkPixel(bg,x, y+1);
 	checkPixel(bg,x, y-1);
-}
-
-void ImageProvider::doLeftRight(int x, int y) {
-	QPoint p(x, y);
-	QRgb rgb_b = image.pixel(p);
-	QRgb  black = qRgb(0, 0, 0);
-	QRgb color = qRgb(255, 0, 0);
-
-	QRgb rgb = rgb_b;
-	if (rgb == black) {
-		printf("ESCAPED!!!!!!\n");
-		return;
-	}
-	printf("Searching for edge...\n");
-
-	QColor tmp;
-
-	int left = x;
-	while (rgb != black && left > 0) {
-		image.setPixel(p, color);
-		left--;
-		p.setX(left);
-		rgb = image.pixel(p);
-		tmp = QColor(rgb);
-	}
-	rgb = rgb_b;
-	int right = x;
-	while (rgb != black && right < image.width()) {
-		image.setPixel(p, color);
-		right++;
-		p.setX(right);
-		rgb = image.pixel(p);
-		tmp = QColor(rgb);
-	}
-}
-
-void ImageProvider::doTopBottom(int x, int y) {
-	QPoint p(x, y);
-	QRgb rgb_b = image.pixel(p);
-	QRgb rgb = rgb_b;
-	QRgb  black = qRgb(0, 0, 0);
-
-	int top = y;
-	while (rgb != black && top > 0) {
-		top--;
-		doLeftRight(x,top);
-	}
-	rgb = rgb_b;
-	int bot = y;
-	while (rgb != black && bot < image.height()) {
-		bot++;
-		doLeftRight(x,bot);
-	}
 }
 
 void ImageProvider::fillColorRec(QRgb bg,int x, int y) {

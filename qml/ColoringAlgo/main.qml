@@ -4,12 +4,21 @@ import QtGraphicalEffects 1.0
 Rectangle {
     width: 303
     height: 500
+    color: "blue"
     Image {
         id: image
-        source: "image://imageprovider/qml/ColoringAlgo/testImage_small_red.png"
+        fillMode: Image.PreserveAspectFit
+        source: "image://imageprovider/qml/ColoringAlgo/giraffe.svg"
         anchors.fill: parent
         objectName: "image"
         cache: false
+
+        onSourceChanged: {
+            setupImageProvider(image.paintedWidth, image.paintedHeight, width, height);
+        }
+        Component.onCompleted: {
+            setupImageProvider(image.paintedWidth, image.paintedHeight, width, height);
+        }
 
         MouseArea {
             anchors.fill: parent
@@ -29,10 +38,18 @@ Rectangle {
         }
     }
 
+
     function colorArea(x, y) {
         //colorFiller.fillColor(image, x, y);
         imageProvider.fillColor(x, y);
-        console.log("image pos: "+image.x+", "+image.y+ " size: "+image.width+", "+image.height, " --- mouse: "+x+", "+y);
+        console.log("image pos: "+image.x+", "+image.y+ " size: "+image.paintedWidth+", "+image.paintedHeight, " --- mouse: "+x+", "+y);
+    }
+
+    function setupImageProvider(iw, ih, ww, wh) {
+        imageProvider.windowWidth = ww;
+        imageProvider.windowHeight = wh;
+        imageProvider.imageWidth = iw;
+        imageProvider.imageHeight = ih;
     }
 }
 
