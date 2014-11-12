@@ -23,7 +23,8 @@ include(qtquick2applicationviewer/qtquick2applicationviewer.pri)
 qtcAddDeployment()
 
 OTHER_FILES += \
-    testImage.png
+    testImage.png \
+    qml/ColoringAlgo/giraffe.svg
 
 HEADERS += \
     colorfiller.h
