@@ -31,15 +31,18 @@ public:
 
 	Q_INVOKABLE void fillColor(int x, int y);
     Q_INVOKABLE void fillColorRec(QRgb bg,int x, int y);
-	void doLeftRight(int x, int y);
-	void doTopBottom(int x, int y);
+    Q_INVOKABLE void setWindowWidth(int ww);
+    Q_INVOKABLE void setWindowHeight(int wh);
+    Q_INVOKABLE void setImageWidth(int iw);
+    Q_INVOKABLE void setImageHeight(int ih);
+
 	void checkPixel(QRgb bg,int x, int y);
 	bool checkColor(QRgb rgb, QRgb base);
 
-	int windowWidth;
-	int windowHeight;
-	int imageWidth;
-	int imageHeight;
+    int m_windowWidth;
+    int m_windowHeight;
+    int m_imageWidth;
+    int m_imageHeight;
 private:
 	bool read;
 	QImage image;

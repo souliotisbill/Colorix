@@ -9,35 +9,57 @@
 ImageProvider::ImageProvider() : QQuickImageProvider(QQmlImageProviderBase::Image)
 {
 	read = false;
-	windowWidth = 0;
-	windowHeight = 0;
-	imageWidth = 0;
-	imageHeight = 0;
+    m_windowWidth = 1;
+    m_windowHeight = 1;
+    m_imageWidth = 1;
+    m_imageHeight = 1;
 }
 
-void ImageProvider::fillColor(int x, int y) {
-	y -= (windowHeight - imageHeight) / 2;
-	x = x * image.width() / imageWidth;
-	y = y * image.height() / imageHeight;
+void ImageProvider::fillColor(int x, int y)
+{
+    y -= (m_windowHeight - m_imageHeight) / 2;
+    x = x * image.width() / m_imageWidth;
+    y = y * image.height() / m_imageHeight;
 
-	printf("image size: %d, %d (x, y): %d, %d\n", image.width(), image.height(), x, y);
+    printf("image size: %d, %d (x, y): %d, %d\n", image.width(), image.height(), x, y);
+    printf("image size: %d, %d (x, y): %d, %d\n", m_windowHeight, m_windowWidth, m_imageHeight, m_imageWidth);
 
-	checkPixel(image.pixel(x, y),x, y);
+    checkPixel(image.pixel(x, y),x, y);
 	//fillColorRec(image.pixel(x, y),x,y);
 	emit newFrameReceived();
 }
 
+void ImageProvider::setWindowWidth(int ww)
+{
+    m_windowWidth = ww;
+}
+
+void ImageProvider::setWindowHeight(int wh)
+{
+    m_windowHeight = wh;
+}
+
+void ImageProvider::setImageWidth(int iw)
+{
+    m_imageWidth = iw;
+}
+
+void ImageProvider::setImageHeight(int ih)
+{
+    m_imageHeight = ih;
+}
+
 bool ImageProvider::checkColor(QRgb rgb, QRgb base) {
-	if (qRed(rgb) < qRed(base) + 5 && qRed(rgb) > qRed(base) - 5 &&
-			qGreen(rgb) < qGreen(base) + 5 && qGreen(rgb) > qGreen(base) - 5 &&
-			qBlue(rgb) < qBlue(base) + 5 && qBlue(rgb) > qBlue(base) - 5)
-		return true;
-	return false;
+    if (qRed(rgb) < qRed(base) + 5 && qRed(rgb) > qRed(base) - 5 &&
+        qGreen(rgb) < qGreen(base) + 5 && qGreen(rgb) > qGreen(base) - 5 &&
+        qBlue(rgb) < qBlue(base) + 5 && qBlue(rgb) > qBlue(base) - 5)
+        return true;
+    return false;
 }
 
 void ImageProvider::checkPixel(QRgb bg,int x, int y) {
 
-	if (x < 1 || x > image.width()-1 || y < 1 || y > image.height()-1) return;
+    if (x < 1 || x > image.width()-1 || y < 1 || y > image.height()-1) return;
 	QRgb  black = qRgb(0, 0, 0);
 	QRgb rgb = image.pixel(x, y);
 	QRgb color = qRgb(255, 0, 0);

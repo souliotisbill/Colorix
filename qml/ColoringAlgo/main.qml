@@ -15,9 +15,11 @@ Rectangle {
 
         onSourceChanged: {
             setupImageProvider(image.paintedWidth, image.paintedHeight, width, height);
+            console.log("RELOADING IMAGE2!");
         }
         Component.onCompleted: {
             setupImageProvider(image.paintedWidth, image.paintedHeight, width, height);
+            console.log("RELOADING IMAGE!");
         }
 
         MouseArea {
@@ -46,10 +48,10 @@ Rectangle {
     }
 
     function setupImageProvider(iw, ih, ww, wh) {
-        imageProvider.windowWidth = ww;
-        imageProvider.windowHeight = wh;
-        imageProvider.imageWidth = iw;
-        imageProvider.imageHeight = ih;
+        imageProvider.setWindowWidth(ww);
+        imageProvider.setWindowHeight(wh);
+        imageProvider.setImageWidth(iw);
+        imageProvider.setImageHeight(ih);
     }
 }
 
