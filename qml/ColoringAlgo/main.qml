@@ -5,6 +5,7 @@ Rectangle {
     width: 303
     height: 500
     color: "blue"
+
     Image {
         id: image
         fillMode: Image.PreserveAspectFit
@@ -13,14 +14,14 @@ Rectangle {
         objectName: "image"
         cache: false
 
-        onSourceChanged: {
-            setupImageProvider(image.paintedWidth, image.paintedHeight, width, height);
-            console.log("RELOADING IMAGE2!");
-        }
-        Component.onCompleted: {
-            setupImageProvider(image.paintedWidth, image.paintedHeight, width, height);
-            console.log("RELOADING IMAGE!");
-        }
+//        onSourceChanged: {
+//            setupImageProvider(image.paintedWidth, image.paintedHeight, width, height);
+//            console.log("RELOADING IMAGE2!");
+//        }
+//        Component.onCompleted: {
+//            setupImageProvider(image.paintedWidth, image.paintedHeight, width, height);
+//            console.log("RELOADING IMAGE!");
+//        }
 
         MouseArea {
             anchors.fill: parent
@@ -37,6 +38,15 @@ Rectangle {
         Connections {
             target: imageProvider
             onNewFrameReceived: image.reload();
+        }
+
+        Component.onCompleted: {
+            setupImageProvider(image.paintedWidth, image.paintedHeight, width, height);
+            console.log("RELOADING IMAGE!");
+        }
+        onSourceChanged: {
+            setupImageProvider(image.paintedWidth, image.paintedHeight, width, height);
+            console.log("RELOADING IMAGE2!");
         }
     }
 

@@ -27,7 +27,7 @@ public:
 		*size = tmpimage.size();
 		this->image = tmpimage;
 		return tmpimage;
-	}
+    }
 
 	Q_INVOKABLE void fillColor(int x, int y);
     Q_INVOKABLE void fillColorRec(QRgb bg,int x, int y);
@@ -39,16 +39,18 @@ public:
 	void checkPixel(QRgb bg,int x, int y);
 	bool checkColor(QRgb rgb, QRgb base);
 
+private:
+	bool read;
+	QImage image;
     int m_windowWidth;
     int m_windowHeight;
     int m_imageWidth;
     int m_imageHeight;
-private:
-	bool read;
-	QImage image;
 
 signals:
-	void newFrameReceived();
+    Q_INVOKABLE void newFrameReceived();
+public slots:
+    void emitNewFrameReceived();
 };
 
 #endif // COLORFILLER_H
