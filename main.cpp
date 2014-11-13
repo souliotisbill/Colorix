@@ -12,9 +12,10 @@ int main(int argc, char *argv[])
     ImageProvider *imageProvider = new ImageProvider();
 
     QtQuick2ApplicationViewer viewer;
+    viewer.rootContext()->setContextProperty("imageProvider", (QObject *)imageProvider);
     viewer.engine()->addImageProvider(QLatin1String("imageprovider"), imageProvider);
     viewer.setMainQmlFile(QStringLiteral("qml/ColoringAlgo/main.qml"));
-    viewer.rootContext()->setContextProperty("imageProvider", (QObject *)imageProvider);
+
 
     viewer.showExpanded();
 

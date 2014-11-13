@@ -14,15 +14,6 @@ Rectangle {
         objectName: "image"
         cache: false
 
-//        onSourceChanged: {
-//            setupImageProvider(image.paintedWidth, image.paintedHeight, width, height);
-//            console.log("RELOADING IMAGE2!");
-//        }
-//        Component.onCompleted: {
-//            setupImageProvider(image.paintedWidth, image.paintedHeight, width, height);
-//            console.log("RELOADING IMAGE!");
-//        }
-
         MouseArea {
             anchors.fill: parent
             onClicked: {
@@ -33,28 +24,24 @@ Rectangle {
             var oldSource = source;
             source = "";
             source = oldSource;
-            console.log("RELOADING IMAGE!");
         }
         Connections {
             target: imageProvider
             onNewFrameReceived: image.reload();
         }
 
-        Component.onCompleted: {
-            setupImageProvider(image.paintedWidth, image.paintedHeight, width, height);
-            console.log("RELOADING IMAGE!");
-        }
         onSourceChanged: {
             setupImageProvider(image.paintedWidth, image.paintedHeight, width, height);
-            console.log("RELOADING IMAGE2!");
+        }
+
+        Component.onCompleted: {
+            setupImageProvider(image.paintedWidth, image.paintedHeight, width, height);
         }
     }
 
 
     function colorArea(x, y) {
-        //colorFiller.fillColor(image, x, y);
         imageProvider.fillColor(x, y);
-        console.log("image pos: "+image.x+", "+image.y+ " size: "+image.paintedWidth+", "+image.paintedHeight, " --- mouse: "+x+", "+y);
     }
 
     function setupImageProvider(iw, ih, ww, wh) {
