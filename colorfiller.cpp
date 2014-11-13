@@ -19,14 +19,15 @@ ImageProvider::ImageProvider() : QQuickImageProvider(QQmlImageProviderBase::Imag
 void ImageProvider::fillColor(int x, int y)
 {
     y -= (m_windowHeight - m_imageHeight) / 2;
+    x -= (m_windowWidth - m_imageWidth) / 2;
     x = x * image.width() / m_imageWidth;
     y = y * image.height() / m_imageHeight;
 
     printf("image size: %d, %d (x, y): %d, %d\n", image.width(), image.height(), x, y);
     printf("image size: %d, %d (x, y): %d, %d\n", m_windowHeight, m_windowWidth, m_imageHeight, m_imageWidth);
 
-    checkPixel(image.pixel(x, y),x, y);
-    //fillColorRec(image.pixel(x, y),x,y);
+    //checkPixel(image.pixel(x, y),x, y);
+    fillColorRec(image.pixel(x, y),x,y);
     QTimer::singleShot(40,this,SLOT(emitNewFrameReceived()));
 }
 

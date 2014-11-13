@@ -37,8 +37,10 @@ Rectangle {
         Component.onCompleted: {
             setupImageProvider(image.paintedWidth, image.paintedHeight, width, height);
         }
-    }
 
+    }
+    onWidthChanged: setupImageProvider(image.paintedWidth, image.paintedHeight, width, height);
+    onHeightChanged: setupImageProvider(image.paintedWidth, image.paintedHeight, width, height);
 
     function colorArea(x, y) {
         imageProvider.fillColor(x, y);
