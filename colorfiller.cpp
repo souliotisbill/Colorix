@@ -25,8 +25,8 @@ void ImageProvider::fillColor(int x, int y)
     printf("image size: %d, %d (x, y): %d, %d\n", image.width(), image.height(), x, y);
     printf("image size: %d, %d (x, y): %d, %d\n", m_windowHeight, m_windowWidth, m_imageHeight, m_imageWidth);
 
-    //checkPixel(image.pixel(x, y),x, y);
-    fillColorRec(image.pixel(x, y),x,y);
+    checkPixel(image.pixel(x, y),x, y);
+    //fillColorRec(image.pixel(x, y),x,y);
     QTimer::singleShot(40,this,SLOT(emitNewFrameReceived()));
 }
 
@@ -64,14 +64,14 @@ bool ImageProvider::checkColor(QRgb rgb, QRgb base) {
     return false;
 }
 
-void ImageProvider::checkPixel(QRgb bg,int x, int y) {
-
-    if (x < 1 || x > image.width()-1 || y < 1 || y > image.height()-1) return;
+void ImageProvider::checkPixel(QRgb bg,int x, int y)
+{
+    if (x < 1 || x >= image.width()-1 || y < 1 || y >= image.height()-1) return;
 	QRgb  black = qRgb(0, 0, 0);
 	QRgb rgb = image.pixel(x, y);
 	QRgb color = qRgb(255, 0, 0);
 
-	if (checkColor(rgb, black)) return;
+    if (checkColor(rgb, black)) return;
 
 	if (checkColor(rgb, color)) return;
 
@@ -79,17 +79,17 @@ void ImageProvider::checkPixel(QRgb bg,int x, int y) {
 
     image.setPixel(x, y, color);
 
-    if (!checkColor(image.pixel(x+1, y), color) &&
-        checkColor(image.pixel(x+1, y), bg)     )
+    if (x+1 < image.width()-1 && x+1 > 0 && !checkColor(image.pixel(x+1, y), color) &&
+        checkColor(image.pixel(x+1, y), bg) )
         checkPixel(bg,x+1, y);
-    if (!checkColor(image.pixel(x-1, y), color) &&
-        checkColor(image.pixel(x-1, y), bg)    )
+    if (x-1 < image.width()-1 && x-1 > 0 && !checkColor(image.pixel(x-1, y), color) &&
+        checkColor(image.pixel(x-1, y), bg) )
         checkPixel(bg,x-1, y);
-    if (!checkColor(image.pixel(x, y+1), color) &&
-        checkColor(image.pixel(x, y+1), bg)        )
+    if (y+1 < image.height()-1 && y+1 > 0 && !checkColor(image.pixel(x, y+1), color) &&
+        checkColor(image.pixel(x, y+1), bg) )
         checkPixel(bg,x, y+1);
-    if (!checkColor(image.pixel(x, y-1), color) &&
-        checkColor(image.pixel(x, y-1), bg)    )
+    if (y-1 < image.height()-1 && y-1 > 0 && !checkColor(image.pixel(x, y-1), color) &&
+        checkColor(image.pixel(x, y-1), bg) )
         checkPixel(bg,x, y-1);
 }
 
